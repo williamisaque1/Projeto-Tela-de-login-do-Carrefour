@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   View,
   Image,
@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   Dimensions,
   Platform,
+  Vibration,
 } from "react-native";
 import icone from "../../assets/Carrefour_logo.svg";
 import { ButtonClick } from "../../component/button";
@@ -15,11 +16,28 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { styles } from "./styles";
 import Axios from "axios";
 import api from "../../services/api";
+import { Animated } from "react-native";
 const { width, height } = Dimensions.get("window");
 export function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [acesso, setAcesso] = useState(null);
+  const AnimatedValue = useRef(new Animated.Value(0));
+  const animacao = () => {
+    Animated.sequence([
+      Animated.timing(AnimatedValue.current, {
+        toValue: 1,
+        duration: 600,
+        useNativeDriver: true,
+      }),
+      Animated.timing(AnimatedValue.current, {
+        toValue: 0,
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
   const enviarDados = async () => {
     try {
       const { data } = await api.post("/ValidaUsuario", {
@@ -28,10 +46,21 @@ export function Login() {
       });
       if (data.id == "101") {
         setAcesso({ acesso: false, mensagem: data.mensagem });
-      }
-      console.log(data.id);
+        animacao();
+        Vibration.vibrate(500);
+        const clear = setTimeout(() => {
+          setAcesso(null);
+          clearTimeout(clear);
+        }, 1700);
+      } else {
+        setAcesso({ acesso: true, mensagem: data.mensagem });
+        animacao();
 
-      console.log(email + "   " + senha);
+        const clear = setTimeout(() => {
+          setAcesso(null);
+          clearTimeout(clear);
+        }, 1700);
+      }
     } catch (e) {
       console.log("erro " + e);
     }
@@ -43,11 +72,16 @@ export function Login() {
           <Text style={styles.textoAcesso}></Text>
         </View>
       ) : acesso?.acesso == false ? (
-        <View style={[styles.acesso, { backgroundColor: "red" }]}>
+        <Animated.View
+          style={[
+            styles.acesso,
+            { backgroundColor: "red", opacity: AnimatedValue.current },
+          ]}
+        >
           <Text style={styles.textoAcesso}>
             Acesso negado {acesso?.mensagem}.
           </Text>
-        </View>
+        </Animated.View>
       ) : (
         <></>
       )}
