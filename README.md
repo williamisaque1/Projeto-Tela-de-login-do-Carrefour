@@ -11,7 +11,7 @@
 - vibration
 #Imagem
  <div>
- <img width=600 , height=300 src="https://user-images.githubusercontent.com/63307185/147840467-c64ceee3-eadd-4fde-b986-5a0b0e06340c.png"
+ <img width=300 , height=600 src="https://user-images.githubusercontent.com/63307185/147840467-c64ceee3-eadd-4fde-b986-5a0b0e06340c.png"
 > </img>
  </div>
 
