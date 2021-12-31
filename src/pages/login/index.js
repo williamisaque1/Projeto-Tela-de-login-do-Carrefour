@@ -50,7 +50,7 @@ export function Login() {
           .string()
           .min(
             4,
-            ({ min }) => `A senha tem que contem no minimo ${min} caracteres`
+            ({ min }) => `A senha tem que contem no minimo ${min} caracteres `
           )
           .required("Email é um campo obrigatório"),
       });
