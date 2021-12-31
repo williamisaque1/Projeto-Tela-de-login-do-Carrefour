@@ -15,7 +15,6 @@ import { Link } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { styles } from "./styles";
 import * as yup from "yup";
-import Axios from "axios";
 import api from "../../services/api";
 import { Animated } from "react-native";
 const { width, height } = Dimensions.get("window");
