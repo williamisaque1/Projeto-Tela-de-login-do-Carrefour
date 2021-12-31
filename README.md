@@ -10,9 +10,10 @@
 - Animated
 - vibration
 #Imagem
- 
+ <div>
  <img width=750 , height=300 src="https://user-images.githubusercontent.com/63307185/147840467-c64ceee3-eadd-4fde-b986-5a0b0e06340c.png"
 > </img>
+ </div>
 
 
 
