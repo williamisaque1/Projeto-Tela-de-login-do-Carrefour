@@ -9,4 +9,5 @@
 - Expo
 - Animated
 - vibration
-<img src=> </img>
+<img src=https://user-images.githubusercontent.com/63307185/147840390-97345a59-9870-4093-aaff-cde1917fe8cb.jpg
+> </img>
