@@ -36,7 +36,7 @@ export function Login() {
     } catch (e) {
       console.log("erro " + e);
     }
-    // console.log(email + "   " + senha);
+    // console.log(email + "   " + senha) ;
   };
   return (
     <View style={styles.container}>
