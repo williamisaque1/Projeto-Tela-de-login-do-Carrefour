@@ -23,7 +23,6 @@ export function Login() {
 
   const enviarDados = async () => {
     try {
-      /*
       const { data } = await api.post(
         "/ValidaUsuario",
         JSON.stringify({
@@ -31,7 +30,7 @@ export function Login() {
           senha: senha,
         })
       );
-      */
+
       console.log(data.data);
     } catch (e) {
       console.log("erro " + e);

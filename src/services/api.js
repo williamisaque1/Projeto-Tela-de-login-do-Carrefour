@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "https://processoreact.projetos.jrmendonca.com.br",
+  baseURL: "https://processoreact.projetos.jrmendonca.com.br/Usuario",
 });
