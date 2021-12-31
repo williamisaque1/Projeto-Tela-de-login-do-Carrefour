@@ -15,30 +15,42 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { styles } from "./styles";
 import Axios from "axios";
 import api from "../../services/api";
-
 const { width, height } = Dimensions.get("window");
 export function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-
+  const [acesso, setAcesso] = useState(null);
   const enviarDados = async () => {
     try {
-      const { data } = await api.post(
-        "/ValidaUsuario",
-        JSON.stringify({
-          email: email,
-          senha: senha,
-        })
-      );
+      const { data } = await api.post("/ValidaUsuario", {
+        email: email,
+        senha: senha,
+      });
+      if (data.id == "101") {
+        setAcesso({ acesso: false, mensagem: data.mensagem });
+      }
+      console.log(data.id);
 
-      console.log(data.data);
+      console.log(email + "   " + senha);
     } catch (e) {
       console.log("erro " + e);
     }
-    // console.log(email + "   " + senha)      ;
   };
   return (
     <View style={styles.container}>
+      {acesso?.acesso == true ? (
+        <View style={([styles.acesso], { backgroundColor: "green" })}>
+          <Text style={styles.textoAcesso}></Text>
+        </View>
+      ) : acesso?.acesso == false ? (
+        <View style={[styles.acesso, { backgroundColor: "red" }]}>
+          <Text style={styles.textoAcesso}>
+            Acesso negado {acesso?.mensagem}.
+          </Text>
+        </View>
+      ) : (
+        <></>
+      )}
       <KeyboardAvoidingView
         behavior={Platform.OS == "ios" ? "padding" : "position"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 64 : -64}

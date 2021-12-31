@@ -1,6 +1,17 @@
 import { StyleSheet, Dimensions } from "react-native";
 const { width, height } = Dimensions.get("window");
 export const styles = StyleSheet.create({
+  acesso: {
+    minWidth: width,
+    minHeight: height * 0.07,
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  textoAcesso: {
+    color: "white",
+    fontSize: 13,
+  },
   container: {
     flex: 1,
     backgroundColor: "#F5F6F7",
