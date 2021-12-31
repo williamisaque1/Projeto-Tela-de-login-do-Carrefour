@@ -14,6 +14,7 @@ import { ButtonClick } from "../../component/button";
 import { Link } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { styles } from "./styles";
+import * as yup from "yup";
 import Axios from "axios";
 import api from "../../services/api";
 import { Animated } from "react-native";
@@ -37,40 +38,73 @@ export function Login() {
       }),
     ]).start();
   };
-
-  const enviarDados = async () => {
+  const verificarDados = async () => {
+    //verificação do email e da senha
+    // as mensagens não estão sendo utilizadas
     try {
-      const { data } = await api.post("/ValidaUsuario", {
-        email: email,
-        senha: senha,
+      const loginValidationSchema = yup.object().shape({
+        email: yup
+          .string()
+          .email("Digite um email válido")
+          .required("Email é um campo obrigatório"),
+        senha: yup
+          .string()
+          .min(
+            4,
+            ({ min }) => `A senha tem que contem no minimo ${min} caracteres`
+          )
+          .required("Email é um campo obrigatório"),
       });
-      if (data.id == "101") {
-        setAcesso({ acesso: false, mensagem: data.mensagem });
-        animacao();
-        Vibration.vibrate(500);
-        const clear = setTimeout(() => {
-          setAcesso(null);
-          clearTimeout(clear);
-        }, 1700);
-      } else {
-        setAcesso({ acesso: true, mensagem: data.mensagem });
-        animacao();
+      await loginValidationSchema.validate({ email, senha });
+      return true;
+    } catch (error) {
+      if (error instanceof yup.ValidationError) {
+        return false;
+      }
+    }
+  };
+  const enviarDados = async () => {
+    //invocar o método de verificação se retornar true será feito a requisição na api
+    try {
+      if ((await verificarDados()) == true) {
+        const { data } = await api.post("/ValidaUsuario", {
+          email: email,
+          senha: senha,
+        });
 
-        const clear = setTimeout(() => {
-          setAcesso(null);
-          clearTimeout(clear);
-        }, 1700);
+        if (data.id == "101") {
+          setAcesso({ acesso: false, mensagem: data.mensagem });
+          animacao();
+          Vibration.vibrate(500);
+          const clear = setTimeout(() => {
+            setAcesso(null);
+            clearTimeout(clear);
+          }, 1700);
+        } else {
+          setAcesso({ acesso: true, mensagem: data.mensagem });
+          animacao();
+          const clear = setTimeout(() => {
+            setAcesso(null);
+            clearTimeout(clear);
+          }, 1700);
+        }
       }
     } catch (e) {
       console.log("erro " + e);
     }
   };
+
   return (
     <View style={styles.container}>
       {acesso?.acesso == true ? (
-        <View style={([styles.acesso], { backgroundColor: "green" })}>
-          <Text style={styles.textoAcesso}></Text>
-        </View>
+        <Animated.View
+          style={
+            ([styles.acesso],
+            { backgroundColor: "green", opacity: AnimatedValue.current })
+          }
+        >
+          <Text style={styles.textoAcesso}> {acesso?.mensagem}</Text>
+        </Animated.View>
       ) : acesso?.acesso == false ? (
         <Animated.View
           style={[
